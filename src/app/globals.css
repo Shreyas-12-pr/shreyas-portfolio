@@ -11,7 +11,7 @@
   
   --text: #eaf5ee;
   --text-muted: #9ab4a3;
-  --text-subtle: #6d8675;
+  --text-subtle: #7d9a89;
   
   --accent: #54f59b;
   --accent-glow: rgba(84, 245, 155, 0.22);
@@ -432,7 +432,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
   font-size: clamp(44px, 5.4vw, 76px);
   font-weight: 700;
   letter-spacing: -0.05em;
-  line-height: 1.08;
+  line-height: 1.12;
 }
 
 .headline-main {
@@ -846,6 +846,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
   font-weight: 600;
   letter-spacing: -0.04em;
   line-height: 1.18;
+  text-wrap: balance;
 }
 
 .section-description {
@@ -1080,7 +1081,6 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
   padding: 14px;
   border: 1px solid var(--surface-border);
   border-radius: 8px;
-  background: rgba(13, 27, 19, 0.5);
   transition: border-color 160ms ease;
 }
 
@@ -1629,6 +1629,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
   font-weight: 600;
   letter-spacing: -0.04em;
   line-height: 1.15;
+  text-wrap: balance;
 }
 
 .contact-description {
