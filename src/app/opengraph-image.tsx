@@ -12,19 +12,27 @@ export async function generateImage(): Promise<ImageResponse> {
     (
       <div
         style={{
-          background: "#0d1117",
+          background: "#050a08",
           width: "1200px",
           height: "630px",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
           flexDirection: "column",
-          gap: "16px",
+          gap: "24px",
         }}
       >
         <div
           style={{
-            color: "#e6edf3",
+            width: "72px",
+            height: "3px",
+            background: "#54f59b",
+            borderRadius: "2px",
+          }}
+        />
+        <div
+          style={{
+            color: "#eafff2",
             fontSize: "72px",
             fontWeight: "600",
             fontFamily: "Georgia, serif",
@@ -34,7 +42,7 @@ export async function generateImage(): Promise<ImageResponse> {
         </div>
         <div
           style={{
-            color: "#58a6ff",
+            color: "#54f59b",
             fontSize: "28px",
             fontFamily: "monospace",
           }}

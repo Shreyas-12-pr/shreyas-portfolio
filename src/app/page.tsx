@@ -306,28 +306,30 @@ export default async function Home() {
                     <span>Exploratory design framework under active iteration.</span>
                   </div>
 
-                  <div className="centerpiece-actions">
-                    {centerpieceProject.liveUrl && (
-                      <a
-                        className="button button-sm button-primary"
-                        href={centerpieceProject.liveUrl}
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        Live Demo <span aria-hidden="true">↗</span>
-                      </a>
-                    )}
-                    {centerpieceProject.repoUrl && (
-                      <a
-                        className="button button-sm button-secondary"
-                        href={centerpieceProject.repoUrl}
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        Source Code <span aria-hidden="true">↗</span>
-                      </a>
-                    )}
-                  </div>
+                  {(centerpieceProject.liveUrl || centerpieceProject.repoUrl) && (
+                    <div className="centerpiece-actions">
+                      {centerpieceProject.liveUrl && (
+                        <a
+                          className="button button-sm button-primary"
+                          href={centerpieceProject.liveUrl}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          Live Demo <span aria-hidden="true">↗</span>
+                        </a>
+                      )}
+                      {centerpieceProject.repoUrl && (
+                        <a
+                          className="button button-sm button-secondary"
+                          href={centerpieceProject.repoUrl}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          Source Code <span aria-hidden="true">↗</span>
+                        </a>
+                      )}
+                    </div>
+                  )}
                 </div>
               </article>
             )}

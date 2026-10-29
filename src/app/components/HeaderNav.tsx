@@ -14,9 +14,23 @@ export function HeaderNav() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  useEffect(() => {
+    if (!mobileMenuOpen) return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setMobileMenuOpen(false);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [mobileMenuOpen]);
+
   const navLinks = [
     { href: "#projects", label: "Projects" },
     { href: "#about", label: "About" },
+    { href: "#skills", label: "Skills" },
     { href: "#education", label: "Education" },
     { href: "#experience", label: "Experience" },
     { href: "#contact", label: "Contact" },
@@ -64,6 +78,7 @@ export function HeaderNav() {
       <div
         className={`mobile-nav-drawer ${mobileMenuOpen ? "mobile-nav-drawer-open" : ""}`}
         aria-hidden={!mobileMenuOpen}
+        inert={!mobileMenuOpen}
       >
         <div className="mobile-nav-inner">
           <p className="mobile-nav-heading">NAVIGATION</p>

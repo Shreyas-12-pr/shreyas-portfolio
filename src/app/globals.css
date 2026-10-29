@@ -97,6 +97,29 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
   color: #050a08;
 }
 
+.skip-link {
+  position: absolute;
+  top: -48px;
+  left: 16px;
+  z-index: 100;
+  padding: 10px 16px;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(84, 245, 155, 0.45);
+  background: #0a1810;
+  color: #eafff2;
+  font-family: "DM Mono", monospace;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: top 180ms ease;
+}
+
+.skip-link:focus-visible {
+  top: 12px;
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
 .page-shell {
   width: min(var(--page-width), calc(100% - 48px));
   margin-inline: auto;
@@ -167,6 +190,10 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 
 .wordmark-period {
   color: var(--accent);
+}
+
+.wordmark-text {
+  color: #f1fff4;
 }
 
 .desktop-nav {
@@ -769,60 +796,6 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 }
 
 /* ==========================================================================
-   INTRO BAND
-   ========================================================================== */
-
-.intro-band {
-  border-top: 1px solid var(--surface-border);
-  border-bottom: 1px solid var(--surface-border);
-  background: rgba(10, 22, 16, 0.9);
-}
-
-.intro-grid {
-  display: grid;
-  grid-template-columns: 0.65fr 1.35fr;
-  align-items: center;
-  gap: 36px;
-  padding-top: 40px;
-  padding-bottom: 40px;
-}
-
-.intro-meta {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.intro-badge {
-  display: inline-block;
-  width: fit-content;
-  padding: 3px 8px;
-  border: 1px solid rgba(84, 245, 155, 0.3);
-  border-radius: 4px;
-  background: rgba(84, 245, 155, 0.08);
-  color: var(--accent);
-  font-family: "DM Mono", monospace;
-  font-size: 9px;
-  font-weight: 500;
-  letter-spacing: 0.1em;
-}
-
-.intro-statement {
-  margin: 0;
-  color: #dcece0;
-  font-family: "Space Grotesk", sans-serif;
-  font-size: clamp(22px, 2.5vw, 32px);
-  font-weight: 400;
-  line-height: 1.45;
-}
-
-.intro-statement em {
-  font-style: normal;
-  color: var(--accent);
-  font-weight: 500;
-}
-
-/* ==========================================================================
    CONTENT SECTIONS & HEADINGS
    ========================================================================== */
 
@@ -1305,6 +1278,92 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
   gap: 12px;
 }
 
+/* Badges, status pills, and technology tags */
+.small-label-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 12px;
+  border: 1px solid rgba(84, 245, 155, 0.25);
+  border-radius: 20px;
+  background: rgba(84, 245, 155, 0.07);
+  color: #9fe8bb;
+  font-family: "DM Mono", monospace;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.project-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #8dafa0;
+  font-family: "DM Mono", monospace;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+}
+
+.status-dot-pulse {
+  width: 7px;
+  height: 7px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 10px rgba(84, 245, 155, 0.7);
+  animation: pulse-glow 2.4s infinite ease-in-out;
+}
+
+.tech-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 12px;
+  border: 1px solid rgba(84, 245, 155, 0.22);
+  border-radius: 6px;
+  background: rgba(13, 27, 19, 0.7);
+  color: #bfe6cd;
+  font-family: "DM Mono", monospace;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+}
+
+.project-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 14px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Supporting project cards */
+.project-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.project-card {
+  height: 100%;
+  padding: 24px;
+  border: 1px solid var(--surface-border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.16);
+  transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+}
+
+.project-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(84, 245, 155, 0.45);
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.28);
+}
+
+.project-card-content {
+  height: 100%;
+}
+
 /* ==========================================================================
    SKILLS SECTION
    ========================================================================== */
@@ -1530,108 +1589,6 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
   text-decoration: underline;
 }
 
-/* Empty State Box */
-.empty-state {
-  display: flex;
-  align-items: center;
-  gap: 18px;
-  padding: 24px 28px;
-  border: 1px dashed rgba(84, 245, 155, 0.28);
-  border-radius: var(--radius-md);
-  background: rgba(11, 24, 17, 0.75);
-}
-
-.empty-state-mark {
-  display: grid;
-  width: 42px;
-  height: 42px;
-  flex-shrink: 0;
-  place-items: center;
-  border: 1px solid rgba(84, 245, 155, 0.35);
-  border-radius: 10px;
-  color: var(--accent);
-  font-size: 20px;
-}
-
-.empty-state h3 {
-  margin: 0;
-  color: #dfefe2;
-  font-size: 15px;
-  font-weight: 600;
-}
-
-.empty-state p {
-  margin: 4px 0 0;
-  color: var(--text-muted);
-  font-size: 13px;
-}
-
-.empty-state-note {
-  margin-left: auto;
-  color: var(--text-subtle);
-  font-family: "DM Mono", monospace;
-  font-size: 11px;
-}
-
-/* ==========================================================================
-   LANGUAGES SECTION
-   ========================================================================== */
-
-.language-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 20px;
-}
-
-.language-card {
-  display: flex;
-  align-items: center;
-  gap: 18px;
-  padding: 22px 26px;
-  border: 1px solid var(--surface-border);
-  border-radius: var(--radius-md);
-  background: var(--surface);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.16);
-  transition: transform 160ms ease, border-color 160ms ease;
-}
-
-.language-card:hover {
-  transform: translateY(-2px);
-  border-color: rgba(84, 245, 155, 0.45);
-}
-
-.lang-icon {
-  font-size: 28px;
-}
-
-.lang-details {
-  flex: 1;
-}
-
-.lang-details h4 {
-  margin: 0 0 4px;
-  color: #ffffff;
-  font-family: "Space Grotesk", sans-serif;
-  font-size: 18px;
-  font-weight: 600;
-}
-
-.lang-details p {
-  margin: 0;
-  color: var(--text-muted);
-  font-size: 13px;
-}
-
-.lang-badge {
-  padding: 4px 10px;
-  border: 1px solid rgba(84, 245, 155, 0.3);
-  border-radius: 20px;
-  background: rgba(84, 245, 155, 0.08);
-  color: var(--accent);
-  font-family: "DM Mono", monospace;
-  font-size: 11px;
-}
-
 /* ==========================================================================
    CONTACT SECTION
    ========================================================================== */
@@ -1745,6 +1702,40 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
   margin: 32px auto 0;
   color: #8da493;
   font-size: 12px;
+}
+
+.contact-detail-btn {
+  font: inherit;
+  color: inherit;
+}
+
+/* ==========================================================================
+   ERROR / NOT FOUND STATE
+   ========================================================================== */
+
+.error-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 720px;
+  margin-inline: auto;
+  text-align: center;
+}
+
+.error-state .section-heading {
+  margin-inline: auto;
+  text-align: center;
+}
+
+.error-state .eyebrow-container {
+  justify-content: center;
+}
+
+.error-state-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 14px;
 }
 
 /* ==========================================================================

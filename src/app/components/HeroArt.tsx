@@ -62,6 +62,7 @@ export function HeroArt() {
             onMouseEnter={() => setActiveTag(tag.id)}
             onMouseLeave={() => setActiveTag(null)}
             onClick={() => setActiveTag(activeTag === tag.id ? null : tag.id)}
+            aria-pressed={activeTag === tag.id}
             title={tag.hint}
           >
             <span>{tag.label}</span>
