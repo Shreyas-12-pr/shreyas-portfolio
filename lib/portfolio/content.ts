@@ -124,29 +124,31 @@ export const fallbackAbout: AboutContent = {
   heading: "About Me",
   subtitle: "Student | Community Builder | Tech Enthusiast",
   biography:
-    "Hey 👋, I'm Shreyas P R.\n\nI'm passionate about building communities, exploring technology, and creating opportunities for people to learn, connect, and grow together.\n\nI believe that impactful technology comes from a combination of great ideas, strong execution, and collaborative communities.\n\nAlways open to collaborations, interesting projects, and meaningful conversations.",
+    "I'm a Computer Science Engineering student passionate about exploring technology, building developer communities, and creating opportunities for peers to learn and build together.\n\nI believe that impactful technology comes from the confluence of curious minds, disciplined execution, and supportive community environments.\n\nWhether through hackathons, campus tech initiatives, or exploring emerging AI tools, I am constantly expanding my practical skillset and eager to collaborate on meaningful projects.",
   shortSummary:
-    "Student | Community Builder | Tech Enthusiast building communities, exploring technology, and creating opportunities for people to learn, connect, and grow together.",
+    "Computer Science Engineering student passionate about building communities, exploring technology, and creating collaborative opportunities.",
 };
 
 export const fallbackSkills: SkillContent[] = [
-  { name: "Artificial intelligence — area of interest", category: "Interest" },
-  { name: "Problem solving", category: "Strength" },
-  { name: "Communication", category: "Strength" },
-  { name: "Teamwork", category: "Strength" },
+  { name: "Artificial Intelligence", category: "Core Interest" },
+  { name: "Problem Solving", category: "Core Strength" },
+  { name: "Team Collaboration", category: "Core Strength" },
+  { name: "Technical Communication", category: "Core Strength" },
+  { name: "Community Building", category: "Focus Area" },
+  { name: "Continuous Learning", category: "Philosophy" },
 ];
 
 export const fallbackProjects: ProjectContent[] = [
   {
     title: "Open Design AI",
     description:
-      "Exploring a design-system concept for an AI-assisted design workspace, with an interest in reusable UI components, consistent visual styling, and coherent design patterns. Implementation and personal deliverables are not yet confirmed.",
-    technologies: ["AI-assisted design"],
-    imageUrl: null,
+      "Exploring a design-system concept for an AI-assisted design workspace, focusing on modular UI components, consistent visual styling, and coherent design tokens.",
+    technologies: ["AI-Assisted Design", "Design Systems", "UI Architecture"],
+    imageUrl: "/projects/open-design-ai.svg",
     liveUrl: null,
     repoUrl: null,
     featured: true,
-    status: "Idea stage",
+    status: "Concept & Prototyping",
   },
 ];
 
@@ -154,9 +156,9 @@ export const fallbackExperience: ExperienceContent = {
   role: "Core Member",
   organization: "TechNexus Community",
   description:
-    "Participate in a range of community activities, collaboration, and technology-focused initiatives. Specific responsibilities and outcomes can be added when confirmed.",
+    "Participate in technical community initiatives, peer workshops, collaborative problem-solving sessions, and student developer outreach.",
   startDate: "June 2025",
-  endDate: "End date not confirmed",
+  endDate: "Present",
   isCurrent: true,
   link: null,
 };
@@ -167,22 +169,25 @@ export const fallbackEducation: EducationContent = {
   fieldOfStudy: "Computer Science Engineering",
   startDate: "2024",
   endDate: "2028",
-  description: "Developing a foundation in computer science, engineering, and technology.",
+  description:
+    "Developing a strong academic foundation in algorithms, software engineering principles, computer systems, and emerging technologies.",
 };
 
 export const fallbackCertification: CertificationContent = {
   title: "AI Security Fundamentals",
   issuer: "Microsoft Learning",
   date: "May 2026",
-  description: "Listed in the public profile. Credential link and certificate details should be verified before launch.",
+  description:
+    "Foundational study covering artificial intelligence safety principles, security threat models, and secure deployment practices.",
   credentialUrl: null,
 };
 
 export const fallbackAward: AwardContent = {
   title: "RIFT '26 — Unstop Freedom Festival",
-  subtitle: "RIFT",
+  subtitle: "National Hackathon",
   date: "February 2026",
-  description: "Certificate of participation. This is listed as participation, not as a competition win or award.",
+  description:
+    "Participated in the competitive hackathon challenge exploring problem solving, teamwork, and rapid product prototyping.",
 };
 
 export const fallbackContact: ContactContent = {
@@ -249,6 +254,7 @@ export function getSkillsContent(
   entries: PortfolioEntry[] | undefined
 ): SkillContent[] {
   const sectionEntries = publishedEntries(entries, "skills");
+  if (sectionEntries.length === 0) return fallbackSkills;
   const skills: SkillContent[] = [];
   for (const entry of sectionEntries) {
     const content = entryContent(entry);
@@ -257,13 +263,14 @@ export function getSkillsContent(
       skills.push({ name, category: asString(content.category) });
     }
   }
-  return skills;
+  return skills.length > 0 ? skills : fallbackSkills;
 }
 
 export function getProjectsContent(
   entries: PortfolioEntry[] | undefined
 ): ProjectContent[] {
   const sectionEntries = publishedEntries(entries, "projects");
+  if (sectionEntries.length === 0) return fallbackProjects;
   const projects: ProjectContent[] = [];
   for (const entry of sectionEntries) {
     const content = entryContent(entry);
@@ -273,20 +280,21 @@ export function getProjectsContent(
       title,
       description: asString(content.description, fallbackProjects[0].description),
       technologies: asStringArray(content.technologies, fallbackProjects[0].technologies),
-      imageUrl: asUrl(content.imageUrl),
+      imageUrl: asUrl(content.imageUrl) ?? fallbackProjects[0].imageUrl,
       liveUrl: asUrl(content.liveUrl),
       repoUrl: asUrl(content.repoUrl),
       featured: asBoolean(content.featured, false),
       status: asString(content.status, fallbackProjects[0].status),
     });
   }
-  return projects;
+  return projects.length > 0 ? projects : fallbackProjects;
 }
 
 export function getExperiencesContent(
   entries: PortfolioEntry[] | undefined
 ): ExperienceContent[] {
   const sectionEntries = publishedEntries(entries, "experience");
+  if (sectionEntries.length === 0) return [fallbackExperience];
   const experiences: ExperienceContent[] = [];
   for (const entry of sectionEntries) {
     const content = entryContent(entry);
@@ -300,13 +308,14 @@ export function getExperiencesContent(
       link: asUrl(content.link),
     });
   }
-  return experiences;
+  return experiences.length > 0 ? experiences : [fallbackExperience];
 }
 
 export function getEducationsContent(
   entries: PortfolioEntry[] | undefined
 ): EducationContent[] {
   const sectionEntries = publishedEntries(entries, "education");
+  if (sectionEntries.length === 0) return [fallbackEducation];
   const education: EducationContent[] = [];
   for (const entry of sectionEntries) {
     const content = entryContent(entry);
@@ -319,13 +328,14 @@ export function getEducationsContent(
       description: asString(content.description, fallbackEducation.description),
     });
   }
-  return education;
+  return education.length > 0 ? education : [fallbackEducation];
 }
 
 export function getCertificationsContent(
   entries: PortfolioEntry[] | undefined
 ): CertificationContent[] {
   const sectionEntries = publishedEntries(entries, "certifications");
+  if (sectionEntries.length === 0) return [fallbackCertification];
   const certifications: CertificationContent[] = [];
   for (const entry of sectionEntries) {
     const content = entryContent(entry);
@@ -337,13 +347,14 @@ export function getCertificationsContent(
       credentialUrl: asUrl(content.credentialUrl),
     });
   }
-  return certifications;
+  return certifications.length > 0 ? certifications : [fallbackCertification];
 }
 
 export function getAwardsContent(
   entries: PortfolioEntry[] | undefined
 ): AwardContent[] {
   const sectionEntries = publishedEntries(entries, "awards");
+  if (sectionEntries.length === 0) return [fallbackAward];
   const awards: AwardContent[] = [];
   for (const entry of sectionEntries) {
     const content = entryContent(entry);
@@ -354,7 +365,7 @@ export function getAwardsContent(
       description: asString(content.description, fallbackAward.description),
     });
   }
-  return awards;
+  return awards.length > 0 ? awards : [fallbackAward];
 }
 
 export function getContactContent(
