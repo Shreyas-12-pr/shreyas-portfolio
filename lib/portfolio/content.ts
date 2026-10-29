@@ -335,7 +335,7 @@ export function getCertificationsContent(
   entries: PortfolioEntry[] | undefined
 ): CertificationContent[] {
   const sectionEntries = publishedEntries(entries, "certifications");
-  if (sectionEntries.length === 0) return [fallbackCertification];
+  if (sectionEntries.length === 0) return [];
   const certifications: CertificationContent[] = [];
   for (const entry of sectionEntries) {
     const content = entryContent(entry);
@@ -347,14 +347,14 @@ export function getCertificationsContent(
       credentialUrl: asUrl(content.credentialUrl),
     });
   }
-  return certifications.length > 0 ? certifications : [fallbackCertification];
+  return certifications;
 }
 
 export function getAwardsContent(
   entries: PortfolioEntry[] | undefined
 ): AwardContent[] {
   const sectionEntries = publishedEntries(entries, "awards");
-  if (sectionEntries.length === 0) return [fallbackAward];
+  if (sectionEntries.length === 0) return [];
   const awards: AwardContent[] = [];
   for (const entry of sectionEntries) {
     const content = entryContent(entry);
@@ -365,7 +365,7 @@ export function getAwardsContent(
       description: asString(content.description, fallbackAward.description),
     });
   }
-  return awards.length > 0 ? awards : [fallbackAward];
+  return awards;
 }
 
 export function getContactContent(

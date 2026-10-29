@@ -92,101 +92,6 @@ function TimelineCard({
   );
 }
 
-function EmptyState({
-  title,
-  description,
-}: {
-  title: string;
-  description: string;
-}) {
-  return (
-    <div className="empty-state">
-      <span className="empty-state-mark" aria-hidden="true">
-        ✦
-      </span>
-      <div>
-        <h3>{title}</h3>
-        <p>{description}</p>
-      </div>
-      <span className="empty-state-note">In preparation</span>
-    </div>
-  );
-}
-
-function ProjectCard({ project }: { project: ProjectContent }) {
-  return (
-    <article className="project-card">
-      {project.imageUrl && (
-        <div className="project-cover">
-          <Image
-            src={project.imageUrl}
-            alt={`${project.title} preview`}
-            fill
-            sizes="(max-width: 650px) 100vw, (max-width: 1100px) 50vw, 420px"
-            className="project-cover-img"
-            priority={project.featured}
-            unoptimized
-          />
-          <div className="project-cover-overlay" />
-        </div>
-      )}
-      <div className="project-card-content">
-        <div className="project-card-topline">
-          <span className="small-label-pill">
-            {project.featured ? "FEATURED WORK" : "PROJECT"}
-          </span>
-          <span className="project-status">
-            <span className="status-dot-pulse" />
-            {project.status}
-          </span>
-        </div>
-
-        <h3>{project.title}</h3>
-
-        {project.technologies.length > 0 && (
-          <ul className="project-tags" aria-label="Technologies">
-            {project.technologies.map((tech) => (
-              <li key={tech} className="tech-badge">
-                {tech}
-              </li>
-            ))}
-          </ul>
-        )}
-
-        <p className="timeline-description">{project.description}</p>
-
-        <div className="project-links">
-          {project.liveUrl && (
-            <a
-              className="button button-sm button-primary"
-              href={project.liveUrl}
-              target="_blank"
-              rel="noreferrer"
-            >
-              Live Demo <span aria-hidden="true">↗</span>
-            </a>
-          )}
-          {project.repoUrl && (
-            <a
-              className="button button-sm button-secondary"
-              href={project.repoUrl}
-              target="_blank"
-              rel="noreferrer"
-            >
-              Source <span aria-hidden="true">↗</span>
-            </a>
-          )}
-          {!project.liveUrl && !project.repoUrl && (
-            <span className="project-status-note">
-              Research &amp; Active Development
-            </span>
-          )}
-        </div>
-      </div>
-    </article>
-  );
-}
-
 export default async function Home() {
   const entries: PortfolioEntry[] = await getPublishedEntries();
 
@@ -218,22 +123,23 @@ export default async function Home() {
     (link) => link.url !== contact.linkedinUrl && link.url !== contact.githubUrl
   );
 
-  // Group skills by category for rich categorized visual presentation
-  const skillCategories = Array.from(
-    new Set(skills.map((s) => s.category || "General"))
-  );
+  // Centerpiece project is the first project (Open Design AI)
+  const centerpieceProject = projects[0];
+  const supportingProjects = projects.slice(1);
 
   return (
     <main className="portfolio-wrapper">
       <HeaderNav />
 
-      {/* Hero Section */}
+      {/* ====================================================================
+          HERO SECTION
+          ==================================================================== */}
       <section className="hero page-shell" id="home">
         <div className="hero-copy">
           <div className="availability">
             <span className="availability-dot" />
             <span className="availability-text">
-              Computer Science Engineering Student · Sapthagiri NPS University
+              Computer Science Engineering · Sapthagiri NPS University
             </span>
           </div>
 
@@ -261,14 +167,14 @@ export default async function Home() {
           <p className="hero-description">{hero.introduction}</p>
 
           <div className="hero-actions">
-            <a className="button button-primary" href={hero.primaryCtaHref}>
-              <span>{hero.primaryCtaLabel}</span>
+            <a className="button button-primary" href="#projects">
+              <span>View Featured Project</span>
               <span className="btn-arrow" aria-hidden="true">
                 ↗
               </span>
             </a>
-            <a className="button button-secondary" href={hero.secondaryCtaHref}>
-              <span>{hero.secondaryCtaLabel}</span>
+            <a className="button button-secondary" href="#about">
+              <span>About My Journey</span>
               <span className="btn-arrow" aria-hidden="true">
                 ↓
               </span>
@@ -300,410 +206,432 @@ export default async function Home() {
           </div>
         </div>
 
-        {/* Hero Cyber Art */}
+        {/* Hero Cyber HUD Artwork */}
         <HeroArt />
 
-        <a className="scroll-cue" href="#about" aria-label="Scroll to about section">
+        <a className="scroll-cue" href="#projects" aria-label="Scroll to featured project">
           <span className="scroll-line" />
-          <span>Scroll to explore</span>
+          <span>Explore Work</span>
         </a>
       </section>
 
-      {/* Intro Band */}
-      <section className="intro-band">
-        <div className="page-shell intro-grid">
-          <div className="intro-meta">
-            <span className="intro-badge">PHILOSOPHY</span>
-            <p className="eyebrow">CORE CONVICTION</p>
-          </div>
-          <p className="intro-statement">
-            Impactful technology combines <em>great ideas</em>, disciplined
-            execution, and <em>collaborative communities</em>.
-          </p>
-        </div>
-      </section>
-
-      {/* About Section */}
-      <section className="content-section page-shell" id="about">
-        <SectionHeading
-          eyebrow="ABOUT"
-          title={about.heading}
-          description="A glimpse into my background, academic direction, and community involvement."
-        />
-
-        {/* Interactive Terminal Profile Card */}
-        <InteractiveTerminal
-          itemsCol1={[
-            { label: "Name", value: hero.name },
-            {
-              label: "Education",
-              value: education[0]
-                ? `${education[0].degree}`
-                : "B.Tech Computer Science Engineering",
-            },
-            {
-              label: "Institution",
-              value: education[0]?.institution || "Sapthagiri NPS University",
-            },
-            {
-              label: "Timeline",
-              value: education[0]
-                ? `${education[0].startDate}–${education[0].endDate}`
-                : "2024–2028",
-            },
-            { label: "Location", value: "Bengaluru, Karnataka, India" },
-          ]}
-          itemsCol2={[
-            {
-              label: "Community",
-              value: experiences[0]
-                ? `${experiences[0].organization} (${experiences[0].role})`
-                : "TechNexus Community",
-            },
-            {
-              label: "Focus Areas",
-              value: "AI · Software Systems · Community",
-            },
-            { label: "Languages", value: "English · Kannada" },
-            {
-              label: "GitHub",
-              value: "github.com/Shreyas-12-pr ↗",
-              isLink: true,
-              href: "https://github.com/Shreyas-12-pr",
-            },
-            {
-              label: "LinkedIn",
-              value: "linkedin.com/in/shreyas-p-r ↗",
-              isLink: true,
-              href: "https://www.linkedin.com/in/shreyas-p-r",
-            },
-          ]}
-        />
-
-        {/* Narrative Biography without Redundant Sentences */}
-        <div className="about-narrative-card">
-          <div className="about-narrative-header">
-            <h3>Hey 👋, I&apos;m {hero.name}</h3>
-            <span className="about-subtitle-badge">{about.subtitle}</span>
-          </div>
-
-          <div className="about-text-content">
-            {about.biography
-              .split(/\n\n+/)
-              .filter((p) => p.trim().length > 0)
-              .map((paragraph, index) => (
-                <p key={`about-paragraph-${index}`}>{paragraph.trim()}</p>
-              ))}
-          </div>
-
-          <div className="about-focus-points">
-            <h4 className="focus-points-title">WHAT DRIVES ME</h4>
-            <div className="focus-points-grid">
-              <div className="focus-point-item">
-                <span className="point-icon">🚀</span>
-                <div>
-                  <strong>Community Building</strong>
-                  <p>Organizing workshops, meetups, and student tech initiatives.</p>
-                </div>
-              </div>
-              <div className="focus-point-item">
-                <span className="point-icon">💻</span>
-                <div>
-                  <strong>Software &amp; AI Systems</strong>
-                  <p>Experimenting with modern web technologies and emerging AI models.</p>
-                </div>
-              </div>
-              <div className="focus-point-item">
-                <span className="point-icon">🤝</span>
-                <div>
-                  <strong>Collaborative Learning</strong>
-                  <p>Connecting passionate learners and sharing knowledge freely.</p>
-                </div>
-              </div>
-              <div className="focus-point-item">
-                <span className="point-icon">📚</span>
-                <div>
-                  <strong>Fundamentals First</strong>
-                  <p>Deepening knowledge in data structures, algorithms, and systems.</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Position / Current Focus Section */}
-      <section className="content-section section-tinted" id="position">
-        <div className="page-shell two-column-section">
-          <SectionHeading
-            eyebrow="CURRENT STATUS"
-            title="Where I am today."
-            description="My focus is computer science, technology, community building, and continuous learning."
-          />
-          <div className="position-panel">
-            <div className="status-chip-row">
-              <span className="status-chip">
-                <span className="availability-dot" /> Currently studying
-              </span>
-              <span className="position-year-badge">Class of 2028</span>
-            </div>
-            <h3>Computer Science Engineering Student</h3>
-            <p>
-              Building a rigorous base in computing principles while actively
-              exploring real-world projects and collaborative communities.
-            </p>
-            <div className="panel-rule" />
-            <div className="position-meta-list">
-              <div className="position-meta">
-                <span>Institution</span>
-                <strong>Sapthagiri NPS University</strong>
-              </div>
-              <div className="position-meta">
-                <span>Current Focus</span>
-                <strong>Algorithms, Web &amp; AI Architecture</strong>
-              </div>
-              <div className="position-meta">
-                <span>Community</span>
-                <strong>TechNexus Community (Core Member)</strong>
-              </div>
-              <div className="position-meta">
-                <span>Next Milestone</span>
-                <strong>Collaborate, contribute, and build</strong>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Education Section */}
-      <section className="content-section page-shell" id="education">
-        <SectionHeading
-          eyebrow="ACADEMICS"
-          title="The Foundation"
-          description="My academic journey in computer science and engineering."
-        />
-        <div className="timeline-list">
-          {education.map((item, index) => (
-            <TimelineCard
-              key={`education-${item.institution}-${item.startDate}-${index}`}
-              label="DEGREE PROGRAM"
-              date={`${item.startDate} – ${item.endDate}`}
-              title={item.degree}
-              subtitle={`${item.fieldOfStudy} · ${item.institution}`}
-              description={item.description}
+      {/* ====================================================================
+          FEATURED WORK / PROJECTS CENTERPIECE
+          ==================================================================== */}
+      {projects.length > 0 && (
+        <section className="content-section section-tinted" id="projects">
+          <div className="page-shell">
+            <SectionHeading
+              eyebrow="FEATURED WORK"
+              title="System Architecture &amp; Exploration"
+              description="A featured study exploring design systems, modular UI component boundaries, and AI-assisted workflows."
             />
-          ))}
-          {education.length === 0 && (
-            <EmptyState
-              title="Education in progress."
-              description="Education entries are being prepared."
-            />
-          )}
-        </div>
-      </section>
 
-      {/* Projects Section */}
-      <section className="content-section section-tinted" id="projects">
-        <div className="page-shell">
-          <SectionHeading
-            eyebrow="SELECTED WORK"
-            title="Projects with purpose."
-            description="A growing collection of ideas, system architectures, and development work."
-          />
-          <div className="project-grid">
-            {projects.map((project, index) => (
-              <ProjectCard
-                key={`project-${project.title}-${index}`}
-                project={project}
-              />
-            ))}
-          </div>
-          {projects.length === 0 && (
-            <EmptyState
-              title="Projects under development."
-              description="Published projects will appear here as they are deployed."
-            />
-          )}
-        </div>
-      </section>
-
-      {/* Skills Section */}
-      <section className="content-section page-shell" id="skills">
-        <SectionHeading
-          eyebrow="SKILLS &amp; FOCUS"
-          title="Skills are built, not claimed."
-          description="Areas of interest, personal strengths, and foundational engineering tools."
-        />
-        <div className="skills-layout">
-          <div className="skills-intro">
-            <span className="skills-symbol">✳</span>
-            <h3>
-              Stay curious.
-              <br />
-              <em>Keep building.</em>
-            </h3>
-            <p>
-              I value deep curiosity, deliberate practice, and the resilience to
-              tackle unfamiliar problems.
-            </p>
-            <div className="skills-quote-highlight">
-              <span>“The best way to learn is by building and sharing.”</span>
-            </div>
-          </div>
-
-          <div className="skills-categorized">
-            {skillCategories.map((category) => {
-              const catSkills = skills.filter(
-                (s) => (s.category || "General") === category
-              );
-              return (
-                <div key={category} className="skill-category-block">
-                  <h4 className="skill-category-title">{category}</h4>
-                  <div className="skill-pills-row">
-                    {catSkills.map((skill) => (
-                      <div className="skill-pill-card" key={skill.name}>
-                        <span className="pill-dot" />
-                        <span className="skill-pill-name">{skill.name}</span>
+            {centerpieceProject && (
+              <article className="centerpiece-card">
+                <div className="centerpiece-header">
+                  <div className="centerpiece-title-row">
+                    <div>
+                      <div className="centerpiece-badge-row">
+                        <span className="small-label-pill">ARCHITECTURE CONCEPT</span>
+                        <span className="project-status">
+                          <span className="status-dot-pulse" />
+                          {centerpieceProject.status}
+                        </span>
                       </div>
-                    ))}
+                      <h3 className="centerpiece-title">{centerpieceProject.title}</h3>
+                    </div>
+
+                    <div className="centerpiece-tech-badges">
+                      {centerpieceProject.technologies.map((tech) => (
+                        <span key={tech} className="tech-badge">
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  <p className="centerpiece-description">
+                    {centerpieceProject.description}
+                  </p>
+                </div>
+
+                {/* Showcase Vector Mockup */}
+                {centerpieceProject.imageUrl && (
+                  <div className="centerpiece-visual-container">
+                    <div className="centerpiece-cover">
+                      <Image
+                        src={centerpieceProject.imageUrl}
+                        alt={`${centerpieceProject.title} preview`}
+                        fill
+                        sizes="(max-width: 900px) 100vw, 1100px"
+                        className="centerpiece-cover-img"
+                        priority
+                        unoptimized
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {/* Architectural Pillars / Features Breakdown */}
+                <div className="centerpiece-pillars">
+                  <div className="pillar-item">
+                    <div className="pillar-num">01</div>
+                    <h4>Design Token Engine</h4>
+                    <p>
+                      Centralized color, spatial grids, and responsive typographic tokens ensuring consistency across multiple viewports.
+                    </p>
+                  </div>
+
+                  <div className="pillar-item">
+                    <div className="pillar-num">02</div>
+                    <h4>Composable UI Primitives</h4>
+                    <p>
+                      Strict component contracts for buttons, inputs, panels, and navigation, designed to avoid stylesheet fragmentation.
+                    </p>
+                  </div>
+
+                  <div className="pillar-item">
+                    <div className="pillar-num">03</div>
+                    <h4>AI-Assisted Guardrails</h4>
+                    <p>
+                      Translating design prompts into structured, validated design-token parameters rather than unconstrained raw markup.
+                    </p>
                   </div>
                 </div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
 
-      {/* Experience Section */}
-      <section className="content-section section-tinted" id="experience">
-        <div className="page-shell">
-          <SectionHeading
-            eyebrow="EXPERIENCE"
-            title="Community &amp; Collaboration"
-            description="Active roles in technology communities and collaborative student initiatives."
-          />
-          <div className="timeline-list">
-            {experiences.map((experience, index) => (
-              <TimelineCard
-                key={`experience-${experience.organization}-${experience.startDate}-${index}`}
-                label="COMMUNITY ROLE"
-                date={`${experience.startDate} · ${
-                  experience.isCurrent ? "Current" : experience.endDate
-                }`}
-                title={experience.role}
-                subtitle={experience.organization}
-                description={experience.description}
-                link={
-                  experience.link
-                    ? { href: experience.link, text: "View community" }
-                    : undefined
-                }
-              />
-            ))}
-            {experiences.length === 0 && (
-              <EmptyState
-                title="Experience entries in progress."
-                description="Community and leadership roles will appear here."
-              />
+                <div className="centerpiece-footer">
+                  <div className="centerpiece-note">
+                    <span className="note-indicator">✦</span>
+                    <span>Exploratory design framework under active iteration.</span>
+                  </div>
+
+                  <div className="centerpiece-actions">
+                    {centerpieceProject.liveUrl && (
+                      <a
+                        className="button button-sm button-primary"
+                        href={centerpieceProject.liveUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        Live Demo <span aria-hidden="true">↗</span>
+                      </a>
+                    )}
+                    {centerpieceProject.repoUrl && (
+                      <a
+                        className="button button-sm button-secondary"
+                        href={centerpieceProject.repoUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        Source Code <span aria-hidden="true">↗</span>
+                      </a>
+                    )}
+                  </div>
+                </div>
+              </article>
+            )}
+
+            {/* Supporting projects if more exist in database */}
+            {supportingProjects.length > 0 && (
+              <div className="project-grid" style={{ marginTop: "32px" }}>
+                {supportingProjects.map((project, index) => (
+                  <div className="project-card" key={`supporting-${project.title}-${index}`}>
+                    <div className="project-card-content">
+                      <div className="project-card-topline">
+                        <span className="small-label-pill">PROJECT</span>
+                        <span className="project-status">{project.status}</span>
+                      </div>
+                      <h3>{project.title}</h3>
+                      <p className="timeline-description">{project.description}</p>
+                      {project.technologies.length > 0 && (
+                        <ul className="project-tags">
+                          {project.technologies.map((t) => (
+                            <li key={t} className="tech-badge">
+                              {t}
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
             )}
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
-      {/* Certifications Section */}
-      <section className="content-section page-shell" id="certifications">
+      {/* ====================================================================
+          ABOUT SECTION & VERIFIED TERMINAL PROFILE
+          ==================================================================== */}
+      <section className="content-section page-shell" id="about">
         <SectionHeading
-          eyebrow="CREDENTIALS"
-          title="Learning with evidence."
-          description="Courses and certifications verifying knowledge in critical computing topics."
+          eyebrow="BACKGROUND"
+          title={about.heading || "Curiosity, Engineering & Community"}
+          description={about.subtitle || "A direct look at my academic grounding, community initiatives, and technical focus."}
         />
-        <div className="timeline-list">
-          {certifications.map((item, index) => (
-            <TimelineCard
-              key={`certification-${item.title}-${item.date}-${index}`}
-              label="CERTIFICATION"
-              date={item.date}
-              title={item.title}
-              subtitle={item.issuer}
-              description={item.description}
-              link={
-                item.credentialUrl
-                  ? { href: item.credentialUrl, text: "View credential" }
-                  : undefined
-              }
+
+        <div className="about-split-layout">
+          {/* Left Column: Focused Narrative */}
+          <div className="about-narrative-panel">
+            <h3 className="about-panel-heading">
+              Building practical software with a collaborative spirit.
+            </h3>
+            
+            <p className="about-panel-text">
+              I am a Computer Science Engineering student at <strong>Sapthagiri NPS University</strong> in Bengaluru. My focus centers on mastering software engineering fundamentals, exploring emerging AI models, and participating in practical projects.
+            </p>
+
+            <p className="about-panel-text">
+              Beyond coursework, I am deeply committed to community building. As a Core Member of the <strong>TechNexus Community</strong>, I help organize student developer initiatives, peer collaboration sessions, and technical meetups to make tech learning accessible and energizing.
+            </p>
+
+            <div className="about-core-pillars">
+              <div className="core-pillar-item">
+                <span className="pillar-icon">🌐</span>
+                <div>
+                  <strong>Community Builder</strong>
+                  <p>Organizing workshops, collaborative hackathon teams, and student outreach.</p>
+                </div>
+              </div>
+
+              <div className="core-pillar-item">
+                <span className="pillar-icon">⚡</span>
+                <div>
+                  <strong>Software Systems</strong>
+                  <p>Studying algorithms, data structures, and modern full-stack web architectures.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Right Column: Verified Terminal Profile */}
+          <div className="about-terminal-panel">
+            <InteractiveTerminal
+              itemsCol1={[
+                { label: "Name", value: hero.name },
+                {
+                  label: "Degree",
+                  value: education[0] ? education[0].degree : "B.Tech Computer Science",
+                },
+                {
+                  label: "University",
+                  value: education[0]?.institution || "Sapthagiri NPS University",
+                },
+                {
+                  label: "Timeline",
+                  value: education[0] ? `${education[0].startDate}–${education[0].endDate}` : "2024–2028",
+                },
+                { label: "Location", value: "Bengaluru, India" },
+              ]}
+              itemsCol2={[
+                {
+                  label: "Community",
+                  value: experiences[0]
+                    ? `${experiences[0].organization} (${experiences[0].role})`
+                    : "TechNexus Community",
+                },
+                {
+                  label: "Focus Areas",
+                  value: "AI · Systems · Software",
+                },
+                { label: "Languages", value: "English · Kannada" },
+                {
+                  label: "GitHub",
+                  value: "github.com/Shreyas-12-pr ↗",
+                  isLink: true,
+                  href: "https://github.com/Shreyas-12-pr",
+                },
+                {
+                  label: "LinkedIn",
+                  value: "linkedin.com/in/shreyas-p-r ↗",
+                  isLink: true,
+                  href: "https://www.linkedin.com/in/shreyas-p-r",
+                },
+              ]}
             />
-          ))}
-          {certifications.length === 0 && (
-            <EmptyState
-              title="Credentials in review."
-              description="Certifications will appear here once verified."
-            />
-          )}
+          </div>
         </div>
       </section>
 
-      {/* Awards Section */}
-      <section className="content-section section-tinted" id="awards">
-        <div className="page-shell">
+      {/* ====================================================================
+          SKILLS SECTION
+          ==================================================================== */}
+      {skills.length > 0 && (
+        <section className="content-section section-tinted" id="skills">
+          <div className="page-shell">
+            <SectionHeading
+              eyebrow="SKILLS &amp; FOCUS"
+              title="Deliberate Practice &amp; Strengths"
+              description="Personal strengths, core interests, and foundational disciplines."
+            />
+
+            <div className="skills-layout">
+              <div className="skills-intro">
+                <span className="skills-symbol">✳</span>
+                <h3>
+                  Stay curious.
+                  <br />
+                  <em>Keep building.</em>
+                </h3>
+                <p>
+                  I value a strong foundation in fundamentals, consistent practice, and the discipline to solve difficult, unfamiliar problems.
+                </p>
+                <div className="skills-quote-highlight">
+                  <span>“Learning accelerates when you build and share openly.”</span>
+                </div>
+              </div>
+
+              <div className="skills-categorized">
+                {Array.from(new Set(skills.map((s) => s.category || "General"))).map((category) => {
+                  const catSkills = skills.filter((s) => (s.category || "General") === category);
+                  return (
+                    <div key={category} className="skill-category-block">
+                      <h4 className="skill-category-title">{category}</h4>
+                      <div className="skill-pills-row">
+                        {catSkills.map((skill) => (
+                          <div className="skill-pill-card" key={skill.name}>
+                            <span className="pill-dot" />
+                            <span className="skill-pill-name">{skill.name}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ====================================================================
+          EDUCATION SECTION (Only rendered if education data exists)
+          ==================================================================== */}
+      {education.length > 0 && (
+        <section className="content-section page-shell" id="education">
           <SectionHeading
-            eyebrow="RECOGNITION"
-            title="Honors &amp; Hackathons"
-            description="Participation in competitive challenges and student hackathons."
+            eyebrow="ACADEMICS"
+            title="Educational Foundation"
+            description="My academic journey in computer science and engineering."
           />
           <div className="timeline-list">
-            {awards.map((item, index) => (
+            {education.map((item, index) => (
               <TimelineCard
-                key={`award-${item.title}-${item.date}-${index}`}
-                label="HACKATHON"
-                date={item.date}
-                title={item.title}
-                subtitle={item.subtitle}
+                key={`education-${item.institution}-${item.startDate}-${index}`}
+                label="DEGREE PROGRAM"
+                date={`${item.startDate} – ${item.endDate}`}
+                title={item.degree}
+                subtitle={`${item.fieldOfStudy} · ${item.institution}`}
                 description={item.description}
               />
             ))}
-            {awards.length === 0 && (
-              <EmptyState
-                title="Recognition entries in progress."
-                description="Upcoming hackathon and festival entries will appear here."
-              />
-            )}
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
-      {/* Languages Section */}
-      <section className="content-section page-shell" id="languages">
-        <SectionHeading
-          eyebrow="LANGUAGES"
-          title="Connecting through language."
-          description="Proficiency in spoken and written languages."
-        />
-        <div className="language-grid">
-          <div className="language-card">
-            <div className="lang-icon">🌐</div>
-            <div className="lang-details">
-              <h4>English</h4>
-              <p>Professional Working Proficiency</p>
+      {/* ====================================================================
+          EXPERIENCE SECTION (Only rendered if experience data exists)
+          ==================================================================== */}
+      {experiences.length > 0 && (
+        <section className="content-section section-tinted" id="experience">
+          <div className="page-shell">
+            <SectionHeading
+              eyebrow="EXPERIENCE"
+              title="Community Leadership &amp; Involvement"
+              description="Active roles in technology communities and collaborative student initiatives."
+            />
+            <div className="timeline-list">
+              {experiences.map((experience, index) => (
+                <TimelineCard
+                  key={`experience-${experience.organization}-${experience.startDate}-${index}`}
+                  label="COMMUNITY ROLE"
+                  date={`${experience.startDate} · ${
+                    experience.isCurrent ? "Current" : experience.endDate
+                  }`}
+                  title={experience.role}
+                  subtitle={experience.organization}
+                  description={experience.description}
+                  link={
+                    experience.link
+                      ? { href: experience.link, text: "View community" }
+                      : undefined
+                  }
+                />
+              ))}
             </div>
-            <span className="lang-badge">Fluent</span>
           </div>
-          <div className="language-card">
-            <div className="lang-icon">💬</div>
-            <div className="lang-details">
-              <h4>Kannada</h4>
-              <p>Native / Bilingual Proficiency</p>
-            </div>
-            <span className="lang-badge">Native</span>
-          </div>
-        </div>
-      </section>
+        </section>
+      )}
 
-      {/* Contact Section */}
+      {/* ====================================================================
+          CERTIFICATIONS SECTION (Only rendered when verified entries exist)
+          ==================================================================== */}
+      {certifications.length > 0 && (
+        <section className="content-section page-shell" id="certifications">
+          <div className="page-shell">
+            <SectionHeading
+              eyebrow="CREDENTIALS"
+              title="Certifications &amp; Training"
+              description="Verified courses and credentials."
+            />
+            <div className="timeline-list">
+              {certifications.map((item, index) => (
+                <TimelineCard
+                  key={`certification-${item.title}-${item.date}-${index}`}
+                  label="CERTIFICATION"
+                  date={item.date}
+                  title={item.title}
+                  subtitle={item.issuer}
+                  description={item.description}
+                  link={
+                    item.credentialUrl
+                      ? { href: item.credentialUrl, text: "View credential" }
+                      : undefined
+                  }
+                />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ====================================================================
+          AWARDS SECTION (Only rendered when verified entries exist)
+          ==================================================================== */}
+      {awards.length > 0 && (
+        <section className="content-section section-tinted" id="awards">
+          <div className="page-shell">
+            <SectionHeading
+              eyebrow="RECOGNITION"
+              title="Honors &amp; Hackathons"
+              description="Participation in competitive challenges and student hackathons."
+            />
+            <div className="timeline-list">
+              {awards.map((item, index) => (
+                <TimelineCard
+                  key={`award-${item.title}-${item.date}-${index}`}
+                  label="HACKATHON"
+                  date={item.date}
+                  title={item.title}
+                  subtitle={item.subtitle}
+                  description={item.description}
+                />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ====================================================================
+          CONTACT SECTION
+          ==================================================================== */}
       <section className="contact-section" id="contact">
         <div className="page-shell contact-inner">
           <div className="contact-kicker">
             <span className="contact-kicker-dot" />
-            <p className="eyebrow">HAVE SOMETHING IN MIND?</p>
+            <p className="eyebrow">GET IN TOUCH</p>
           </div>
 
           <h2>{contact.heading}</h2>
@@ -771,14 +699,16 @@ export default async function Home() {
 
           <p className="contact-note">
             Feel free to reach out via LinkedIn or GitHub for collaborations,
-            hackathon teams, and tech discussions.
+            hackathon teams, or discussions about technology and community building.
           </p>
         </div>
       </section>
 
-      {/* Site Footer */}
+      {/* ====================================================================
+          SITE FOOTER
+          ==================================================================== */}
       <footer className="site-footer">
-        <a className="wordmark footer-wordmark" href="#home">
+        <a className="wordmark footer-wordmark" href="#home" aria-label="Back to home">
           <span className="wordmark-mark">S</span>
           <span>
             Shreyas P R<span className="wordmark-period">.</span>
